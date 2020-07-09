@@ -12,6 +12,7 @@ These are some basic notes on running an OpenSSL CA on top of a nCipher HSM. The
 
 # Steps
 1. Ensure you have a combination of the openssl.cnf built to suit your needs based on the above section
+1. Define the OPENSSL_CONF environment variable to be your configuration file created above
 
 # Sample commands
 
@@ -28,8 +29,11 @@ Sign an intermediate CA (intermed-ca_ext needs to be defined in openssl.cnf):
 ```
 
 $NFAST_PRELOAD_CARDSET == the friendly name for the OCS cardset
+
 $OPENSSL_ENGINE == pkcs11 (or whatever engine you are using)
+
 $OPENSSL_KEYFORM == engine
+
 $OPENSSL_PRIVATE_KEY == pkcs11 path to your key
 
 # Getting PKCS11 path
@@ -39,3 +43,13 @@ With an OCS smartcard inserted in the HSM:
 ```
 p11tool --list-all --provider=/opt/nfast/toolkits/pkcs11/libcknfast.so
 ```
+
+# Troubleshooting
+## Preload asks for a password for the smartcard and OpenSSL asks again for a password?
+This is expected. Preload will temporarily load the entire cardset. OpenSSL should just ask for the password of the smartcard currently inserted into the HSM
+
+## Smartcard password incorrect even if you are sure it is correct
+I've only seen this happen with an OCS cardset where a persistence timeout is configured. Remove the smartcard, re-insert and try again.
+
+## OpenSSL doesn't like the PKCS11 key?
+Double check if you are using key vs keyfile arguments (you should be using keyfile). OpenSSL treats them differently depending if you are in the x509 or CA context.
