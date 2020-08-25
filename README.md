@@ -52,4 +52,5 @@ This is expected. Preload will temporarily load the entire cardset. OpenSSL shou
 I've only seen this happen with an OCS cardset where a persistence timeout is configured. Remove the smartcard, re-insert and try again.
 
 ## OpenSSL doesn't like the PKCS11 key?
-Double check if you are using key vs keyfile arguments (you should be using keyfile). OpenSSL treats them differently depending if you are in the x509 or CA context.
+Double check if you are using key vs keyfile arguments (you should be using keyfile). OpenSSL treats them differently depending if you are in the x509 or CA context. (see https://github.com/Yubico/developers.yubico.com/issues/109#issuecomment-430136518 as an example)
+
